@@ -9,6 +9,7 @@ public class PlayerCardController : MonoBehaviour
     [Header("Prefabs")]
     [SerializeField] GameObject CardPrefab;
 
+
     [Header("Card Position")]
     [SerializeField, Tooltip("Start position for the first card")] 
     Vector2 StartPosition;
@@ -26,7 +27,10 @@ public class PlayerCardController : MonoBehaviour
     public void AddCard(ScriptableObject card)
     {
         CardsInHand.Add(card);
-        
+        var go = Instantiate(CardPrefab);
+        LastUsedPosition = new Vector2(LastUsedPosition.x + CardPositionIncrement, LastUsedPosition.y);
+        go.transform.position = LastUsedPosition;
+        go.transform.parent = this.transform;
     }
     public void EmptyHand() => CardsInHand.Clear();
 
