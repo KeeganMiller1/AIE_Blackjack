@@ -26,11 +26,17 @@ public class PlayerCardController : MonoBehaviour
 
     public void AddCard(ScriptableObject card)
     {
+        // Add the card to the hand
         CardsInHand.Add(card);
+        // Spawn the card in the world
         var go = Instantiate(CardPrefab);
+        // Update the position variables & set the position of the card
         LastUsedPosition = new Vector2(LastUsedPosition.x + CardPositionIncrement, LastUsedPosition.y);
         go.transform.position = LastUsedPosition;
+        // Attach the card this game object
         go.transform.parent = this.transform;
+        // Setup the card details
+        go.GetComponent<CardController>().Card = card;
     }
     public void EmptyHand() => CardsInHand.Clear();
 
