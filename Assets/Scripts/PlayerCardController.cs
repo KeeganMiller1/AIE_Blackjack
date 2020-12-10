@@ -56,17 +56,24 @@ public class PlayerCardController : MonoBehaviour
         GameManager.Instance.AddObjectInScene(go);
         // Get the current value of the players hand
         HandValue = CalculateHand();
-        CheckForBust();
+        CheckHandStatus();
     }
 
-    private void CheckForBust()
+    private void CheckHandStatus()
     {
-        if(HandValue > 21)
+        if(HandValue == 21)
         {
-            Debug.Log("Bust: " + HandValue);
+            Debug.Log("Black Jack");
         } else
         {
-            Debug.Log("Current: " + HandValue);
+            if (HandValue > 21)
+            {
+                Debug.Log("Bust: " + HandValue);
+            }
+            else
+            {
+                Debug.Log("Current: " + HandValue);
+            }
         }
     }
 
