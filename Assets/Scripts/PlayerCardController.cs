@@ -54,6 +54,20 @@ public class PlayerCardController : MonoBehaviour
 
         // Add the obejct to alist that can be cleared when needed
         GameManager.Instance.AddObjectInScene(go);
+        // Get the current value of the players hand
+        HandValue = CalculateHand();
+        CheckForBust();
+    }
+
+    private void CheckForBust()
+    {
+        if(HandValue > 21)
+        {
+            Debug.Log("Bust: " + HandValue);
+        } else
+        {
+            Debug.Log("Current: " + HandValue);
+        }
     }
 
     Vector2 GetNextPosition()
@@ -67,8 +81,9 @@ public class PlayerCardController : MonoBehaviour
 
     int CalculateHand()
     {
+        // Initial value
         int currentValue = 0;
-
+        // Loop through each card that is not an ace first to get a default score
         foreach(var card in CardsInHand)
         {
             var c = card as CardObject;
@@ -78,44 +93,54 @@ public class PlayerCardController : MonoBehaviour
             }
         }
 
-        if(totalAces() > 1)
+        if(totalAces() > 0)
         {
-            if(currentValue > 10)
+            // Check the amount of aces
+            if (totalAces() > 1)         // If there is more than one 
             {
-                foreach(var a in CardsInHand)
-                {
-                    var aces = a as CardObject;
-                    if (aces.CardType == ECardType.ACE)
-                        currentValue += 1;
-                }
-            } else
-            {
-                var aceValue = TotalValueOfAces();
-                var tempValue = aceValue + currentValue;
-                if(tempValue > 21)
+                // and the value is greater than 10 add 1 point for each card
+                if (currentValue > 10)
                 {
                     currentValue += totalAces();
-                } else if(tempValue < 21)
-                {
-                    currentValue += 1;
-                    currentValue += (totalAces() - 1);
                 }
-            }
-        } else
-        {
-            if (currentValue > 10)
-            {
-                currentValue += 1;
+                else
+                {
+                    // if the value is not larger than 10, add all the aces together to check whether we can use an 11 
+                    // or if we have to use 1's 
+                    var aceValue = TotalValueOfAces();
+                    var tempValue = aceValue + currentValue;
+                    if (tempValue > 21)
+                    {
+                        currentValue += totalAces();
+                    }
+                    else if (tempValue < 21)
+                    {
+                        currentValue += 1;
+                        currentValue += (totalAces() - 1);
+                    }
+                }
             }
             else
             {
-                currentValue += 11;
+                // If there is only 1 ace determine whether it should be used as a 1 or an 11
+                if (currentValue > 10)
+                {
+                    currentValue += 1;
+                }
+                else
+                {
+                    currentValue += 11;
+                }
             }
         }
 
-        return 0;
+        return currentValue;
     }
 
+    /// <summary>
+    /// This method will detemine the amount of aces in the players hand
+    /// </summary>
+    /// <returns></returns>
     int totalAces()
     {
         int aces = 0;
@@ -129,6 +154,10 @@ public class PlayerCardController : MonoBehaviour
         return aces;
     }
 
+    /// <summary>
+    /// This method calculates the total value of the players hand
+    /// </summary>
+    /// <returns></returns>
     int TotalValueOfAces()
     {
         int aceValue = 0;
