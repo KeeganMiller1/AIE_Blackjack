@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,6 +11,8 @@ public class Dealer : MonoBehaviour
     [SerializeField] List<ScriptableObject> Deck = new List<ScriptableObject>();
     [SerializeField] List<ScriptableObject> Played = new List<ScriptableObject>();
 
+    PlayerCardController PlayerCards;
+
     public void Awake()
     {
         if(Instance == null)
@@ -19,5 +22,20 @@ public class Dealer : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
+
+        PlayerCards = GetComponent<PlayerCardController>();
+    }
+
+    public void DealCard(PlayerCardController Cards)
+    {
+        Cards.AddCard(GetCard());
+    }
+
+    private ScriptableObject GetCard()
+    {
+        var card = Deck[UnityEngine.Random.Range(0, Deck.Count)];
+        Played.Add(card);
+        Deck.Remove(card);
+        return card;
     }
 }
