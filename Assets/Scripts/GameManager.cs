@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviour
     [Header("Game Status")]
     EGameState GameState;
 
+    List<GameObject> ObjectsInScene = new List<GameObject>();
+
     void Awake()
     {
         // Create a singleton
@@ -33,4 +35,12 @@ public class GameManager : MonoBehaviour
 
     public void ChangeGameState(EGameState NewState) => GameState = NewState;
     EGameState GetGameState() => GameState;
+
+    // -- OBJECT CONTROLLERS -- //
+    public void AddObjectInScene(GameObject newObject)
+    {
+        ObjectsInScene.Add(newObject);
+    }
+
+    public void ClearScene() => ObjectsInScene.Clear();
 }
