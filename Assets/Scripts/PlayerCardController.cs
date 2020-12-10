@@ -37,6 +37,7 @@ public class PlayerCardController : MonoBehaviour
         go.transform.parent = this.transform;
         // Setup the card details
         go.GetComponent<CardController>().Card = card;
+        go.GetComponent<CardController>().SetupObject();
         // Add the obejct to alist that can be cleared when needed
         GameManager.Instance.AddObjectInScene(go);
     }
