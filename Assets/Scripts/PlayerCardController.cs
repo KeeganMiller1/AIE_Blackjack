@@ -11,14 +11,15 @@ public class PlayerCardController : MonoBehaviour
 
 
     [Header("Card Position")]
-    Vector2 ResetPosition = new Vector2(-0.7f, 0f);
+    Vector2 ResetPosition;
     Vector2 LastUsedPosition;
     [SerializeField, Tooltip("How much the X Position will increase each card")]
     float CardPositionIncrement;
 
-    void Awake()
+    void Start()
     {
-
+        ResetPosition = new Vector2(-0.7f, this.gameObject.transform.position.y);
+        LastUsedPosition = ResetPosition;
     }
 
     List<ScriptableObject> GetCardsInHand() => CardsInHand;
