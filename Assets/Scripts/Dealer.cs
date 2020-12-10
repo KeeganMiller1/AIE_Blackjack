@@ -49,13 +49,13 @@ public class Dealer : MonoBehaviour
         }
 
         // Deal 2 Cards to the dealer.
-        DealCard(PlayerCards);
+        DealCard(PlayerCards, false);
         DealCard(PlayerCards);
     }
 
-    public void DealCard(PlayerCardController Cards)
+    public void DealCard(PlayerCardController Cards, bool ShowCard = true)
     {
-        Cards.AddCard(GetCard());
+        Cards.AddCard(GetCard(), ShowCard);
     }
 
     private ScriptableObject GetCard()

@@ -384,8 +384,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CardPrefab: {fileID: 5395413905159105824, guid: d96cf1c9831cc474a9216f17a7518bb2,
     type: 3}
-  StartPosition: {x: 0, y: 0}
-  CardPositionIncrement: 0.7
+  CardPositionIncrement: 0.5
 --- !u!1 &1657715984
 GameObject:
   m_ObjectHideFlags: 0
@@ -418,8 +417,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CardPrefab: {fileID: 5395413905159105824, guid: d96cf1c9831cc474a9216f17a7518bb2,
     type: 3}
-  StartPosition: {x: 0, y: 0}
-  CardPositionIncrement: 0.7
+  CardPositionIncrement: 0.5
 --- !u!114 &1657715986
 MonoBehaviour:
   m_ObjectHideFlags: 0
