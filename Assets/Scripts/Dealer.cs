@@ -29,6 +29,7 @@ public class Dealer : MonoBehaviour
     void Start()
     {
         GameManager.Instance.SetupPlayers();
+        BeginRound();
     }
 
     void BeginRound()
@@ -38,6 +39,7 @@ public class Dealer : MonoBehaviour
         // Loop through each player (validate the player) and add 2 cards to their hand
         foreach(var p in Players)
         {
+            Debug.Log("Dealt Card");
             if(p != null)
             {
                 PlayerCardController controller = p.GetComponent<PlayerCardController>();
