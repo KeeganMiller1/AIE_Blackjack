@@ -11,6 +11,8 @@ public class Dealer : MonoBehaviour
     [SerializeField, Tooltip("The Deck Of Cards")] List<ScriptableObject> Deck = new List<ScriptableObject>();
     [Tooltip("Cards Currently In play")] List<ScriptableObject> Played = new List<ScriptableObject>();
 
+    int PlayerNum;
+
     PlayerCardController PlayerCards;
 
     public void Awake()
@@ -67,4 +69,8 @@ public class Dealer : MonoBehaviour
         Deck.Remove(card);
         return card;
     }
+
+
+    public void SetPlayerNum(int num) => PlayerNum = num;
+    public int GetPlayerNum() => PlayerNum;
 }
