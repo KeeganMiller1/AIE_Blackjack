@@ -18,6 +18,11 @@ public class GameManager : MonoBehaviour
     [Header("Game Status")]
     EGameState GameState;
 
+
+    [Header("Game Settings | Card Back")]
+    [SerializeField] List<Sprite> CardBacks = new List<Sprite>();
+    [SerializeField] int SelectedCardBacks = 0;
+
     List<GameObject> ObjectsInScene = new List<GameObject>();
 
     void Awake()
@@ -43,4 +48,5 @@ public class GameManager : MonoBehaviour
     }
 
     public void ClearScene() => ObjectsInScene.Clear();
+    public Sprite GetSelectedCardBack() => CardBacks[SelectedCardBacks];
 }
