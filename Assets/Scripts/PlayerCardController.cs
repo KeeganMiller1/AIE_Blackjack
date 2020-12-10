@@ -11,8 +11,7 @@ public class PlayerCardController : MonoBehaviour
 
 
     [Header("Card Position")]
-    [SerializeField, Tooltip("Start position for the first card")] 
-    Vector2 StartPosition;
+    Vector2 ResetPosition = new Vector2(0.7f, 0f);
     Vector2 LastUsedPosition;
     [SerializeField, Tooltip("How much the X Position will increase each card")]
     float CardPositionIncrement;
@@ -33,14 +32,25 @@ public class PlayerCardController : MonoBehaviour
         // Update the position variables & set the position of the card
         LastUsedPosition = new Vector2(LastUsedPosition.x + CardPositionIncrement, LastUsedPosition.y);
         go.transform.position = LastUsedPosition;
-        // Attach the card this game object
+        // Attach the card this game object & set the position
         go.transform.parent = this.transform;
+        go.transform.position = GetNextPosition();
+        
         // Setup the card details
         go.GetComponent<CardController>().Card = card;
         go.GetComponent<CardController>().SetupObject();
+
         // Add the obejct to alist that can be cleared when needed
         GameManager.Instance.AddObjectInScene(go);
     }
+
+    Vector2 GetNextPosition()
+    {
+        LastUsedPosition = new Vector2(LastUsedPosition.x + CardPositionIncrement, LastUsedPosition.y);
+        return LastUsedPosition;
+    }
+
+
     public void EmptyHand() => CardsInHand.Clear();
 
 }
