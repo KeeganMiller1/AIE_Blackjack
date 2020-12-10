@@ -49,7 +49,13 @@ public class GameManager : MonoBehaviour
         // Find all the players in the game and add them to the list
         GameObject[] p_arr = GameObject.FindGameObjectsWithTag("Player");
         foreach (var p in p_arr)
+        {
             PlayersInGame.Add(p);
+            p.GetComponent<PlayerController>().SetPlayerNum(PlayersInGame.Count - 1);
+        }
+
+        PlayersInGame.Add(GameObject.FindGameObjectWithTag("Dealer"));
+        PlayersInGame[PlayersInGame.Count - 1].GetComponent<Dealer>().SetPlayerNum(PlayersInGame.Count - 1);
     }
 
     public void ChangeGameState(EGameState NewState) => GameState = NewState;
