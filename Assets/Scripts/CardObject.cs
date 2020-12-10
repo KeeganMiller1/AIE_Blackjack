@@ -20,7 +20,7 @@ public enum ECardType
 }
 
 
-
+[CreateAssetMenu(fileName = "Card Object", menuName = "Scriptable Objects/Cards", order = 1)]
 class CardObject : ScriptableObject 
 {
     public ECardSuite CardSuit;
