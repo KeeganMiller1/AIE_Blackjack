@@ -23,6 +23,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] List<Sprite> CardBacks = new List<Sprite>();
     [SerializeField] int SelectedCardBacks = 0;
 
+    [Header("Players")]
+    List<GameObject> PlayersInGame = new List<GameObject>();
+
     List<GameObject> ObjectsInScene = new List<GameObject>();
 
     void Awake()
@@ -38,6 +41,17 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void SetupPlayers()
+    {
+        // Clear to ensure we are updating the list of active players
+        PlayersInGame.Clear();
+
+        // Find all the players in the game and add them to the list
+        GameObject[] p_arr = GameObject.FindGameObjectsWithTag("Player");
+        foreach (var p in p_arr)
+            PlayersInGame.Add(p);
+    }
+
     public void ChangeGameState(EGameState NewState) => GameState = NewState;
     EGameState GetGameState() => GameState;
 
@@ -49,4 +63,5 @@ public class GameManager : MonoBehaviour
 
     public void ClearScene() => ObjectsInScene.Clear();
     public Sprite GetSelectedCardBack() => CardBacks[SelectedCardBacks];
+    public List<GameObject> GetPlayersInGame() => PlayersInGame;
 }
