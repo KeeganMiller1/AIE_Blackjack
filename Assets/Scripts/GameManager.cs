@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         // Create a singleton
-        if(Instance = null)
+        if(Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(this.gameObject);
