@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     [SerializeField] int TotalPlayers;
-    int PlayersTurn = 1;
+    int PlayersTurn = 0;
 
     [Header("Game Status")]
     EGameState GameState;
@@ -70,4 +70,5 @@ public class GameManager : MonoBehaviour
     public void ClearScene() => ObjectsInScene.Clear();
     public Sprite GetSelectedCardBack() => CardBacks[SelectedCardBacks];
     public List<GameObject> GetPlayersInGame() => PlayersInGame;
+    public int GetPlayerTurn() => PlayersTurn;
 }

@@ -38,21 +38,28 @@ public class Dealer : MonoBehaviour
     {
         // Get a list of the players in game (Excluding the dealer)
         List<GameObject> Players = GameManager.Instance.GetPlayersInGame();
+        int playerCount = 0;
         // Loop through each player (validate the player) and add 2 cards to their hand
         foreach(var p in Players)
         {
             Debug.Log("Dealt Card");
             if(p != null)
             {
-                PlayerCardController controller = p.GetComponent<PlayerCardController>();
-                DealCard(controller);
-                DealCard(controller);
+                if(playerCount != PlayerNum)
+                {
+                    PlayerCardController controller = p.GetComponent<PlayerCardController>();
+                    DealCard(controller);
+                    DealCard(controller);
+
+                } else
+                {
+                    // Deal 2 Cards to the dealer.
+                    DealCard(PlayerCards, false);
+                    DealCard(PlayerCards);
+                }
+                playerCount++;
             }
         }
-
-        // Deal 2 Cards to the dealer.
-        DealCard(PlayerCards, false);
-        DealCard(PlayerCards);
     }
 
     public void DealCard(PlayerCardController Cards, bool ShowCard = true)
