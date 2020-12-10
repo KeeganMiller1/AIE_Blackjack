@@ -26,6 +26,31 @@ public class Dealer : MonoBehaviour
         PlayerCards = GetComponent<PlayerCardController>();
     }
 
+    void Start()
+    {
+        GameManager.Instance.SetupPlayers();
+    }
+
+    void BeginRound()
+    {
+        // Get a list of the players in game (Excluding the dealer)
+        List<GameObject> Players = GameManager.Instance.GetPlayersInGame();
+        // Loop through each player (validate the player) and add 2 cards to their hand
+        foreach(var p in Players)
+        {
+            if(p != null)
+            {
+                PlayerCardController controller = p.GetComponent<PlayerCardController>();
+                DealCard(controller);
+                DealCard(controller);
+            }
+        }
+
+        // Deal 2 Cards to the dealer.
+        DealCard(PlayerCards);
+        DealCard(PlayerCards);
+    }
+
     public void DealCard(PlayerCardController Cards)
     {
         Cards.AddCard(GetCard());
