@@ -8,8 +8,8 @@ public class Dealer : MonoBehaviour
     public static Dealer Instance;
 
     [Header("Card List")]
-    [SerializeField] List<ScriptableObject> Deck = new List<ScriptableObject>();
-    [SerializeField] List<ScriptableObject> Played = new List<ScriptableObject>();
+    [SerializeField, Tooltip("The Deck Of Cards")] List<ScriptableObject> Deck = new List<ScriptableObject>();
+    [Tooltip("Cards Currently In play")] List<ScriptableObject> Played = new List<ScriptableObject>();
 
     PlayerCardController PlayerCards;
 
@@ -33,7 +33,9 @@ public class Dealer : MonoBehaviour
 
     private ScriptableObject GetCard()
     {
+        // Select a random card from the deck
         var card = Deck[UnityEngine.Random.Range(0, Deck.Count)];
+        // Add the card to played & remove to from the deck
         Played.Add(card);
         Deck.Remove(card);
         return card;
