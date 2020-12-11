@@ -17,7 +17,6 @@ public class PlayerController : MonoBehaviour
     PlayerCardController GetPlayerCards() => PlayerCards;
     public void SetPlayerNum(int num) => PlayerGameNumber = num;
     public int GetPlayerNum() => PlayerGameNumber;
-
     public bool IsThisPlayer() => IsPlayer;
 
 }

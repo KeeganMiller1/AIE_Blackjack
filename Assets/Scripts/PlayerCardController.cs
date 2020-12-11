@@ -21,7 +21,7 @@ public class PlayerCardController : MonoBehaviour
 
     void Start()
     {
-        ResetPosition = new Vector2(-0.7f, GetComponent<Transform>().position.y);
+        ResetPosition = new Vector2(2.0f, GetComponent<Transform>().position.y);
         LastUsedPosition = ResetPosition;
     }
 
@@ -34,8 +34,8 @@ public class PlayerCardController : MonoBehaviour
         // Spawn the card in the world
         var go = Instantiate(CardPrefab);
         // Update the position variables & set the position of the card
-        LastUsedPosition = new Vector2(LastUsedPosition.x + CardPositionIncrement, LastUsedPosition.y);
-        go.transform.position = LastUsedPosition;
+        //LastUsedPosition = new Vector2(LastUsedPosition.x + CardPositionIncrement, 0);
+        go.transform.position = GetNextPosition();
         // Attach the card this game object & set the position
         go.transform.parent = this.transform;
         go.transform.localPosition = GetNextPosition();
@@ -68,11 +68,11 @@ public class PlayerCardController : MonoBehaviour
         {
             if (HandValue > 21)
             {
-                Debug.Log("Bust: " + HandValue);
+                Debug.Log("Bust");
             }
             else
             {
-                Debug.Log("Current: " + HandValue);
+                // TODO:
             }
         }
     }
@@ -80,6 +80,7 @@ public class PlayerCardController : MonoBehaviour
     Vector2 GetNextPosition()
     {
         LastUsedPosition = new Vector2(LastUsedPosition.x + CardPositionIncrement, 0);
+        Debug.Log(LastUsedPosition);
         return LastUsedPosition;
     }
 
