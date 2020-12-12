@@ -16,51 +16,71 @@ public class AI_Brain : MonoBehaviour
 {
     PlayerCardController CardController;
     bool Stand = false;
+
+    [SerializeField] float ActionWaitTime = 2.0f;
+    float CurrentWaitTime = 0;
+    public BrainKeys Keys = new BrainKeys();
+
+
     void Awake()
     {
         CardController = GetComponent<PlayerCardController>();
     }
 
+    void Update()
+    {
+        // Get the key to see if it's the AI's turn, than check if they've waited long enough for there turn, if they have than complete the action
+        if(Keys.GetBool("IsTurn"))
+        {
+            CardController.GetCardsInHand()[0].GetComponent<CardController>().ShowCard();
+            CurrentWaitTime += 1 * Time.deltaTime;
+            if(CurrentWaitTime > ActionWaitTime)
+            {
+                Action();
+                CurrentWaitTime = 0;
+            }
+        }
+    }
+
+
     public void Action()
     {
-
-        do
+        // Make sure that the controller is valid
+        if (CardController != null)
         {
-            if (CardController != null)
+            // Get the current value & run a switch to see if there are any pre-determined actions, if there are then perform those actions
+            // otherwise let the AI Decide based on their cards and the players cards.
+            var total = CardController.GetCurrentValue();
+            switch (total)
             {
-                var total = CardController.GetCurrentValue();
-                switch (total)
-                {
-                    case 17:
-                        ActionController.Instance.Stand();
-                        break;
-                    default:
-                        DetermineHit();
-                        break;
-
-                }
+                case 17:            // STAND-OFF (Split Pot)
+                    AI_Stand();
+                    break;
+                default:
+                    DetermineHit();
+                    break;
             }
-        } while (!Stand);
-
-        // Update the statuses
-        Dealer.Instance.ChangeGameStatus(GameStatus.COUNTING);
-        Stand = false;
+        }
     }
 
     void DetermineHit()
     {
+        // Get a list of players and set the temp action
         List<GameObject> Players = GameManager.Instance.GetPlayersInGame();
-
         AI_TempAction NextAction = AI_TempAction.Random;
 
+        // Loop through each player's hand if there value is higher than the dealer hit, if it's equal to the dealer than stand
         foreach(var p in Players)
         {
             if(p.GetComponent<PlayerCardController>().GetCurrentValue() > this.CardController.GetCurrentValue())
             {
-                ActionController.Instance.Hit();
+                Debug.Log(p.GetComponent<PlayerCardController>().GetCurrentValue());
+                AI_Hit();
+                ResetWaitTime();
                 break;
             } else if(p.GetComponent<PlayerCardController>().GetCurrentValue() == this.CardController.GetCurrentValue())
             {
+                // TODO: Before hitting check the number of the card and potenially use probability to detemine the AI Action
                 NextAction = AI_TempAction.Stand;
                 Stand = true;
             }
@@ -71,8 +91,7 @@ public class AI_Brain : MonoBehaviour
             ActionController.Instance.Hit();
         } else if(NextAction == AI_TempAction.Stand)
         {
-            ActionController.Instance.Stand();
-            Stand = true;
+            AI_Stand();
         } else
         {
             RandomAction();
@@ -127,11 +146,29 @@ public class AI_Brain : MonoBehaviour
         // Check if that value is less than the prob, if it is than hit. otherwise stand
         if(Range < value)
         {
-            ActionController.Instance.Hit();
+            AI_Hit();
+            ResetWaitTime();
         } else
         {
-            Stand = true;
-            ActionController.Instance.Stand();
+            AI_Stand();
         }
+
+
     }
+
+    void AI_Stand()
+    {
+        ActionController.Instance.Stand();
+        Keys.SetBool("IsTurn", false);
+        //Dealer.Instance.ChangeGameStatus(GameStatus.COUNTING);
+        Debug.Log("Standing");
+        GameManager.Instance.ResetTurns();
+    }
+
+    void AI_Hit()
+    {
+        Dealer.Instance.DealCard(CardController);
+    }
+
+    public void ResetWaitTime() => CurrentWaitTime = 0;
 }
