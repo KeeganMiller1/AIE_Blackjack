@@ -14,11 +14,15 @@ public class CardController : MonoBehaviour
     public void HideCard()
     {
         GetComponent<SpriteRenderer>().sprite = GameManager.Instance.GetSelectedCardBack();
+        CanSeeCard = false;
     }
 
     public void ShowCard()
     {
         CardObject card = Card as CardObject;
         GetComponent<SpriteRenderer>().sprite = card.CardSprite;
+        CanSeeCard = true;
     }
+
+    public bool IsCardVisible() => CanSeeCard;
 }
