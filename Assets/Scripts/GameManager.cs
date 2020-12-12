@@ -58,6 +58,31 @@ public class GameManager : MonoBehaviour
         PlayersInGame[PlayersInGame.Count - 1].GetComponent<Dealer>().SetPlayerNum(PlayersInGame.Count - 1);
     }
 
+    public void NextPlayerTurn()
+    {
+        // Increment the player turn
+        PlayersTurn++;
+        // If each player has had their term
+        if (PlayersTurn == PlayersInGame.Count - 1)
+        {
+            // If the game status is equal to the betting stage than change it to the play state
+            if(Dealer.Instance.GetCurrentGameStatus() == GameStatus.BETTING)
+            {
+                Dealer.Instance.ChangeGameStatus(GameStatus.IN_PLAY);
+                // If the game status is In play than, change it to counting
+            } else if(Dealer.Instance.GetCurrentGameStatus() == GameStatus.IN_PLAY)
+            {
+                Dealer.Instance.PlayTurn();
+                //Dealer.Instance.ChangeGameStatus(GameStatus.COUNTING);
+            }
+
+            PlayersTurn = 0;
+        }
+
+        
+        
+    }
+
     public void ChangeGameState(EGameState NewState) => GameState = NewState;
     EGameState GetGameState() => GameState;
 
