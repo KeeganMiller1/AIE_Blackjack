@@ -12,6 +12,34 @@ public enum AI_TempAction
     Random
 }
 
+public class BrainKeys
+{
+    bool IsTurn = false;
+
+    public void SetBool(string key, bool value)
+    {
+        switch(key)
+        {
+            case "IsTurn":
+                IsTurn = value;
+                break;
+            default:
+                break;
+        }
+    }
+
+    public bool GetBool(string key)
+    {
+        switch(key)
+        {
+            case "IsTurn":
+                return IsTurn;
+            default:
+                return false;
+        }
+    }
+}
+
 public class AI_Brain : MonoBehaviour
 {
     PlayerCardController CardController;
