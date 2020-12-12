@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerCardController : MonoBehaviour
 {
-    List<ScriptableObject> CardsInHand = new List<ScriptableObject>();
+    List<GameObject> CardsInHand = new List<GameObject>();
 
     [Header("Prefabs")]
     [SerializeField] GameObject CardPrefab;
@@ -25,12 +25,12 @@ public class PlayerCardController : MonoBehaviour
         LastUsedPosition = ResetPosition;
     }
 
-    List<ScriptableObject> GetCardsInHand() => CardsInHand;
+    public List<GameObject> GetCardsInHand() => CardsInHand;
 
     public void AddCard(ScriptableObject card, bool ShowCard = true)
     {
         // Add the card to the hand
-        CardsInHand.Add(card);
+        
         // Spawn the card in the world
         var go = Instantiate(CardPrefab);
         // Update the position variables & set the position of the card
@@ -42,15 +42,17 @@ public class PlayerCardController : MonoBehaviour
         
         // Setup the card details
         go.GetComponent<CardController>().Card = card;
-        
+        CardsInHand.Add(go);
 
-        if(ShowCard)
+        if (ShowCard)
         {
             go.GetComponent<CardController>().ShowCard();
         } else
         {
             go.GetComponent<CardController>().HideCard();
         }
+
+
 
         // Add the obejct to alist that can be cleared when needed
         GameManager.Instance.AddObjectInScene(go);
@@ -84,7 +86,6 @@ public class PlayerCardController : MonoBehaviour
     Vector2 GetNextPosition()
     {
         LastUsedPosition = new Vector2(LastUsedPosition.x + CardPositionIncrement, 0);
-        Debug.Log(LastUsedPosition);
         return LastUsedPosition;
     }
 
@@ -98,7 +99,7 @@ public class PlayerCardController : MonoBehaviour
         // Loop through each card that is not an ace first to get a default score
         foreach(var card in CardsInHand)
         {
-            var c = card as CardObject;
+            var c = card.GetComponent<CardController>().Card as CardObject;
             if(c.CardType != ECardType.ACE)
             {
                 currentValue += c.CardValue;
@@ -158,7 +159,7 @@ public class PlayerCardController : MonoBehaviour
         int aces = 0;
         foreach(var a in CardsInHand)
         {
-            var card = a as CardObject;
+            var card = a.GetComponent<CardController>().Card as CardObject;
             if (card.CardType == ECardType.ACE)
                 aces++;
         }
@@ -176,8 +177,8 @@ public class PlayerCardController : MonoBehaviour
 
         foreach(var a in CardsInHand)
         {
-            var ace = a as CardObject;
-            if(ace.CardType == ECardType.ACE)
+            var card = a.GetComponent<CardController>().Card as CardObject;
+            if (card.CardType == ECardType.ACE)
             {
                 aceValue += 11;
             }
