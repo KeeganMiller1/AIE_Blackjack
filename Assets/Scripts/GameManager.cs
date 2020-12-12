@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -69,14 +70,16 @@ public class GameManager : MonoBehaviour
             if(Dealer.Instance.GetCurrentGameStatus() == GameStatus.BETTING)
             {
                 Dealer.Instance.ChangeGameStatus(GameStatus.IN_PLAY);
+                PlayersTurn = 0;
                 // If the game status is In play than, change it to counting
             } else if(Dealer.Instance.GetCurrentGameStatus() == GameStatus.IN_PLAY)
             {
-                Dealer.Instance.PlayTurn();
-                //Dealer.Instance.ChangeGameStatus(GameStatus.COUNTING);
+                // Reset the brain wait time & trigger the key so the AI knows that it's their turn
+                // We will change the status of the game from the AI brain
+                Dealer.Instance.GetBrain().ResetWaitTime();
+                Dealer.Instance.GetBrain().Keys.SetBool("IsTurn", true);
             }
 
-            PlayersTurn = 0;
         }
 
         
@@ -96,4 +99,9 @@ public class GameManager : MonoBehaviour
     public Sprite GetSelectedCardBack() => CardBacks[SelectedCardBacks];
     public List<GameObject> GetPlayersInGame() => PlayersInGame;
     public int GetPlayerTurn() => PlayersTurn;
+
+    public void ResetTurns()
+    {
+        PlayersTurn = 0;
+    }
 }
