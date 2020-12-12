@@ -31,6 +31,26 @@ public class ActionController : MonoBehaviour
             GameManager.Instance.NextPlayerTurn();
         }
     }
+
+    // --- BETTING ACTIONS --- //
+    public void BetFive() => GetPlayer().AddBet(5);
+    public void BetTen() => GetPlayer().AddBet(10);
+    public void BetTwoFive() => GetPlayer().AddBet(25);
+    public void BetFiveZero() => GetPlayer().AddBet(50);
+    public void BetOneZeroZero() => GetPlayer().AddBet(100);
+    public void ConfirmBet()
+    {
+        if(Dealer.Instance.GetCurrentGameStatus() == GameStatus.BETTING)
+        {
+            GetPlayer().ConfirmBet();
+        }
+        GameManager.Instance.NextPlayerTurn();
+    }
+
+
+    bool CheckIfTurn()
+    {
+
         List<GameObject> Players = GameManager.Instance.GetPlayersInGame();
 
         foreach(var p in Players)
@@ -42,9 +62,8 @@ public class ActionController : MonoBehaviour
                 {
                     if(controller.GetPlayerNum() == GameManager.Instance.GetPlayerTurn())
                     {
-                        Dealer.Instance.DealCard(p.GetComponent<PlayerCardController>());
+                        return true;
                     }
-                    break;
                 }
             }
         }
