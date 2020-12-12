@@ -4,6 +4,17 @@ using UnityEngine;
 
 public class ActionController : MonoBehaviour
 {
+    public static ActionController Instance;
+    void Awake()
+    {
+        if(Instance == null)
+        {
+            Instance = this;
+        } else
+        {
+            Destroy(this.gameObject);
+        }
+    }
     public void Hit()
     {
         List<GameObject> Players = GameManager.Instance.GetPlayersInGame();
