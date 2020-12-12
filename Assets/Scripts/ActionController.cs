@@ -17,6 +17,20 @@ public class ActionController : MonoBehaviour
     }
     public void Hit()
     {
+        if(CheckIfTurn())
+        {
+            Dealer.Instance.DealCard(GetPlayerCards());
+            Debug.Log("Player Hit");
+        }
+    }
+
+    public void Stand()
+    {
+        if(CheckIfTurn())
+        {
+            GameManager.Instance.NextPlayerTurn();
+        }
+    }
         List<GameObject> Players = GameManager.Instance.GetPlayersInGame();
 
         foreach(var p in Players)
@@ -34,5 +48,30 @@ public class ActionController : MonoBehaviour
                 }
             }
         }
+
+        return false;
+    }
+
+    PlayerCardController GetPlayerCards()
+    {
+        List<GameObject> Players = GameManager.Instance.GetPlayersInGame();
+        foreach(var p in Players)
+        {
+            if (p.GetComponent<PlayerController>().IsThisPlayer())
+                return p.GetComponent<PlayerCardController>();
+        }
+
+        return null;
+    }
+    PlayerController GetPlayer()
+    {
+        List<GameObject> Players = GameManager.Instance.GetPlayersInGame();
+        foreach (var p in Players)
+        {
+            if (p.GetComponent<PlayerController>().IsThisPlayer())
+                return p.GetComponent<PlayerController>();
+        }
+
+        return null;
     }
 }
