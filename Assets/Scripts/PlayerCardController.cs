@@ -59,6 +59,10 @@ public class PlayerCardController : MonoBehaviour
         CheckHandStatus();
     }
 
+
+    /// <summary>
+    /// Checks the current value of the hand to see if it's a win or lost, or continue playing
+    /// </summary>
     private void CheckHandStatus()
     {
         if(HandValue == 21)
@@ -182,4 +186,6 @@ public class PlayerCardController : MonoBehaviour
         return aceValue;
     }
 
+
+    public int GetCurrentValue() => HandValue;
 }
