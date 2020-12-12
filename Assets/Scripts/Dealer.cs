@@ -19,15 +19,17 @@ public class Dealer : MonoBehaviour
     [SerializeField, Tooltip("The Deck Of Cards")] List<ScriptableObject> Deck = new List<ScriptableObject>();
     [Tooltip("Cards Currently In play")] List<ScriptableObject> Played = new List<ScriptableObject>();
 
+    GameStatus CurrentGameStatus;
 
     [Header("Current Hand Details")]
     int CurrentPot = 0;
 
+    [Header("Player Details")]
     int PlayerNum;
-
     PlayerCardController PlayerCards;
+    AI_Brain Brain;
 
-    GameStatus CurrentGameStatus;
+    
 
     public void Awake()
     {
@@ -40,6 +42,7 @@ public class Dealer : MonoBehaviour
         }
 
         PlayerCards = GetComponent<PlayerCardController>();
+        Brain = GetComponent<AI_Brain>();
     }
 
     void Start()
@@ -56,7 +59,6 @@ public class Dealer : MonoBehaviour
         // Loop through each player (validate the player) and add 2 cards to their hand
         foreach(var p in Players)
         {
-            Debug.Log("Dealt Card");
             if(p != null)
             {
                 if(playerCount != PlayerNum)
@@ -106,9 +108,48 @@ public class Dealer : MonoBehaviour
             case GameStatus.IN_PLAY:
                 BeginRound();
                 break;
+            case GameStatus.COUNTING:
+                CountCards();
+                break;
             default:
                 Debug.LogError("Error Changing State");
                 break;
+        }
+    }
+
+    private void CountCards()
+    {
+        foreach(var card in this.PlayerCards.GetCardsInHand())
+        {
+            card.GetComponent<CardController>().ShowCard();
+        }
+
+        PlayerController HighestValue = null;
+        foreach(var p in GameManager.Instance.GetPlayersInGame())
+        {
+            PlayerCardController Cntrl = p.GetComponent<PlayerCardController>();
+            if(Cntrl != null)
+            {
+                if(Cntrl.GetCurrentValue() <= 21)
+                {
+                    if(HighestValue == null)
+                    {
+                        HighestValue = p.GetComponent<PlayerController>();
+                    } else
+                    {
+                        if (Cntrl.GetCurrentValue() > HighestValue.GetPlayerCards().GetCurrentValue())
+                            HighestValue = Cntrl.gameObject.GetComponent<PlayerController>();
+                    }
+                }
+            }
+        }
+
+        if(this.PlayerCards.GetCurrentValue() > HighestValue.GetPlayerCards().GetCurrentValue())
+        {
+            Debug.Log("Dealer Wins");
+        } else
+        {
+            Debug.Log("Player Wins");
         }
     }
 
@@ -121,4 +162,5 @@ public class Dealer : MonoBehaviour
     public void SetPlayerNum(int num) => PlayerNum = num;
     public GameStatus GetCurrentGameStatus() => CurrentGameStatus;
     public int GetPlayerNum() => PlayerNum;
+    public AI_Brain GetBrain() => Brain;
 }
