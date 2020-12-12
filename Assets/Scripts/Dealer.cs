@@ -3,6 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum GameStatus
+{
+    BETTING,
+    IN_PLAY,
+    COUNTING,
+    END
+}
+
 public class Dealer : MonoBehaviour
 {
     public static Dealer Instance;
@@ -11,9 +19,15 @@ public class Dealer : MonoBehaviour
     [SerializeField, Tooltip("The Deck Of Cards")] List<ScriptableObject> Deck = new List<ScriptableObject>();
     [Tooltip("Cards Currently In play")] List<ScriptableObject> Played = new List<ScriptableObject>();
 
+
+    [Header("Current Hand Details")]
+    int CurrentPot = 0;
+
     int PlayerNum;
 
     PlayerCardController PlayerCards;
+
+    GameStatus CurrentGameStatus;
 
     public void Awake()
     {
@@ -31,7 +45,7 @@ public class Dealer : MonoBehaviour
     void Start()
     {
         GameManager.Instance.SetupPlayers();
-        BeginRound();
+        CurrentGameStatus = GameStatus.BETTING;
     }
 
     void BeginRound()
@@ -62,6 +76,11 @@ public class Dealer : MonoBehaviour
         }
     }
 
+    public void AddToPot(int Chips)
+    {
+        CurrentPot += Chips;
+    }
+
     public void DealCard(PlayerCardController Cards, bool ShowCard = true)
     {
         Cards.AddCard(GetCard(), ShowCard);
@@ -77,7 +96,29 @@ public class Dealer : MonoBehaviour
         return card;
     }
 
+    public void ChangeGameStatus(GameStatus NewStatus)
+    {
+        // Change the state
+        CurrentGameStatus = NewStatus;
+        // Run a switch statement to check the value
+        switch(NewStatus)
+        {
+            case GameStatus.IN_PLAY:
+                BeginRound();
+                break;
+            default:
+                Debug.LogError("Error Changing State");
+                break;
+        }
+    }
+
+    public void PlayTurn()
+    {
+        GetComponent<AI_Brain>().Action();
+    }
+
 
     public void SetPlayerNum(int num) => PlayerNum = num;
+    public GameStatus GetCurrentGameStatus() => CurrentGameStatus;
     public int GetPlayerNum() => PlayerNum;
 }
