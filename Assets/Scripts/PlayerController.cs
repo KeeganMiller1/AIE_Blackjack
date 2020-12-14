@@ -111,5 +111,13 @@ public class PlayerController : MonoBehaviour
     public bool IsThisPlayer() => IsPlayer;
     public int GetLastBet() => LastBet;
     public int GetCurrrentBet() => CurrentBet;
+    public int GetTotalChips() => TotalChips;
 
+    // --- SETTERS --- //
+    public void SetDoubleLastBet() 
+    {
+        TotalChips -= LastBet;
+        LastBet *= LastBet;
+        UpdateBetValue();
+    }
 }

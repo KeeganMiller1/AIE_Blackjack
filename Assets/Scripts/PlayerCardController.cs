@@ -65,6 +65,19 @@ public class PlayerCardController : MonoBehaviour
         CheckHandStatus();
     }
 
+    public void DoubleDown()
+    {
+        int last_bet = this.gameObject.GetComponent<PlayerController>().GetLastBet();
+        int chips = this.gameObject.GetComponent<PlayerController>().GetTotalChips();
+
+        if(last_bet < chips)
+        {
+            this.gameObject.GetComponent<PlayerController>().SetDoubleLastBet();
+            Dealer.Instance.DealCard(this, true);
+            GameManager.Instance.NextPlayerTurn();
+        }
+    }
+
 
     /// <summary>
     /// Checks the current value of the hand to see if it's a win or lost, or continue playing
