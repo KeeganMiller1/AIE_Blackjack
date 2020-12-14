@@ -76,7 +76,60 @@ public class Dealer : MonoBehaviour
                 playerCount++;
             }
         }
+
+        CheckNaturals();
+        
     }
+
+    void CheckNaturals()
+    {
+        List<GameObject> Naturals = new List<GameObject>();
+
+        foreach (var p in GameManager.Instance.GetPlayersInGame())
+        {
+            int total = 0;
+            foreach (var card in p.GetComponent<PlayerCardController>().GetCardsInHand())
+            {
+                var c = card.GetComponent<CardController>().Card as CardObject;
+                total += c.CardValue;
+            }
+
+            if (total == 21)
+            {
+                Naturals.Add(p);
+            }
+        }
+
+        if(Naturals.Count > 1)
+        {
+            foreach(var p in Naturals)
+            {
+                var cntrl = p.GetComponent<PlayerController>();
+                if(cntrl != null)
+                {
+                    cntrl.AddChips(CurrentPot / Naturals.Count);
+                }
+
+            }
+
+            ChangeGameStatus(GameStatus.END);
+            EndRound();
+        } else if(Naturals.Count == 1)
+        {
+            var cntrl = Naturals[0].GetComponent<PlayerController>();
+            if(cntrl != null)
+            {
+                cntrl.AddChips(Mathf.RoundToInt(CurrentPot * 1.5f));
+                
+            }
+
+            ChangeGameStatus(GameStatus.END);
+            EndRound();
+        }
+
+    }
+
+    
 
     public void AddToPot(int Chips)
     {
