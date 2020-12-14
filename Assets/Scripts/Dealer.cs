@@ -87,52 +87,36 @@ public class Dealer : MonoBehaviour
     void CheckNaturals()
     {
         List<GameObject> Naturals = new List<GameObject>();
-
-        foreach (var p in GameManager.Instance.GetPlayersInGame())
+        foreach(var p in GameManager.Instance.GetPlayersInGame())
         {
-            int total = 0;
-            foreach (var card in p.GetComponent<PlayerCardController>().GetCardsInHand())
+            PlayerController player = p.GetComponent<PlayerController>();
+            if(player != null)
             {
-                var c = card.GetComponent<CardController>().Card as CardObject;
-                total += c.CardValue;
-            }
-
-            if (total == 21)
-            {
-                Naturals.Add(p);
+                if(p.GetComponent<PlayerCardController>().GetCurrentValue() == 21)
+                {
+                    Naturals.Add(p);
+                }
             }
         }
 
-        if(Naturals.Count > 1)
+        bool DealerHasNat = false;
+        if (PlayerCards.GetCurrentValue() == 21)
+            DealerHasNat = true;
+
+        if(DealerHasNat)
+        {
+            foreach (var p in Naturals)
+            {
+                p.GetComponent<PlayerController>().AddChips(p.GetComponent<PlayerController>().GetLastBet());
+            }
+        } else
         {
             foreach(var p in Naturals)
             {
-                var cntrl = p.GetComponent<PlayerController>();
-                if(cntrl != null)
-                {
-                    cntrl.AddChips(CurrentPot / Naturals.Count);
-                }
-
+                p.GetComponent<PlayerController>().AddChips(Mathf.RoundToInt(p.GetComponent<PlayerController>().GetLastBet() * 2.5f));
             }
-
-            ChangeGameStatus(GameStatus.END);
-            EndRound();
-        } else if(Naturals.Count == 1)
-        {
-            var cntrl = Naturals[0].GetComponent<PlayerController>();
-            if(cntrl != null)
-            {
-                cntrl.AddChips(Mathf.RoundToInt(CurrentPot * 1.5f));
-                
-            }
-
-            ChangeGameStatus(GameStatus.END);
-            EndRound();
         }
-
     }
-
-    
 
     public void AddToPot(int Chips)
     {
@@ -161,6 +145,8 @@ public class Dealer : MonoBehaviour
         // Run a switch statement to check the value
         switch(NewStatus)
         {
+            case GameStatus.BETTING:
+                break;
             case GameStatus.IN_PLAY:
                 BeginRound();
                 break;
@@ -212,6 +198,13 @@ public class Dealer : MonoBehaviour
     {
         GameManager.Instance.ClearScene();
         ChangeGameStatus(GameStatus.BETTING);
+        foreach(var p in GameManager.Instance.GetPlayersInGame())
+        {
+            p.GetComponent<PlayerCardController>().GetCardsInHand().Clear();
+            p.GetComponent<PlayerCardController>().ResetCardPosition();
+        }
+
+        // TODO: Check If Player has broken Bank if so go to end screen
     }
 
     #region Win Triggers
