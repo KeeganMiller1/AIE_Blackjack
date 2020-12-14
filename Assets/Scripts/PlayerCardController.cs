@@ -18,6 +18,7 @@ public class PlayerCardController : MonoBehaviour
 
     [Header("Current Hand")]
     int HandValue;
+    bool Bust = false;
 
     void Start()
     {
@@ -67,19 +68,11 @@ public class PlayerCardController : MonoBehaviour
     /// </summary>
     private void CheckHandStatus()
     {
-        if(HandValue == 21)
+        if(HandValue > 21)
         {
-            Debug.Log("Black Jack");
-        } else
-        {
-            if (HandValue > 21)
-            {
-                Debug.Log("Bust");
-            }
-            else
-            {
-                // TODO:
-            }
+            Bust = true;
+            // TODO: Display bust
+            GameManager.Instance.NextPlayerTurn();
         }
     }
 
@@ -189,4 +182,5 @@ public class PlayerCardController : MonoBehaviour
 
 
     public int GetCurrentValue() => HandValue;
+    public bool HasPlayerBust() => Bust;
 }
