@@ -167,21 +167,29 @@ public class Dealer : MonoBehaviour
             // If the player controller isn't the dealers
             if(p.GetComponent<PlayerCardController>() != PlayerCards && !p.GetComponent<PlayerCardController>().HasPlayerBust())
             {
-                // Get current value
-                int player_value = p.GetComponent<PlayerCardController>().GetCurrentValue();
-                // Check if the player value is larget than the dealer, if it is than double there bet.
-                // Otherwise if it's equal to the dealer they get their bet back.
-                if(player_value > PlayerCards.GetCurrentValue())
+                if(!PlayerCards.HasPlayerBust())
                 {
-                    p.GetComponent<PlayerController>().AddChips(p.GetComponent<PlayerController>().GetLastBet() * 2);
-                    ShowWin(p.GetComponent<PlayerController>().GetLastBet() * 2);
-                } else if(player_value == PlayerCards.GetCurrentValue())
-                {
-                    p.GetComponent<PlayerController>().AddChips(p.GetComponent<PlayerController>().GetLastBet());
-                    ShowDraw();
+                    // Get current value
+                    int player_value = p.GetComponent<PlayerCardController>().GetCurrentValue();
+                    // Check if the player value is larget than the dealer, if it is than double there bet.
+                    // Otherwise if it's equal to the dealer they get their bet back.
+                    if (player_value > PlayerCards.GetCurrentValue())
+                    {
+                        p.GetComponent<PlayerController>().AddChips(p.GetComponent<PlayerController>().GetLastBet() * 2);
+                        ShowWin(p.GetComponent<PlayerController>().GetLastBet() * 2);
+                    }
+                    else if (player_value == PlayerCards.GetCurrentValue())
+                    {
+                        p.GetComponent<PlayerController>().AddChips(p.GetComponent<PlayerController>().GetLastBet());
+                        ShowDraw();
+                    }
+                    else
+                    {
+                        ShowLose();
+                    }
                 } else
                 {
-                    ShowLose();
+                    ShowWin(p.GetComponent<PlayerController>().GetLastBet() * 2);
                 }
             }
 

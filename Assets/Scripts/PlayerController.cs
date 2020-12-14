@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -34,6 +35,7 @@ public class PlayerController : MonoBehaviour
     public int GetPlayerNum() => PlayerGameNumber;
     public bool IsThisPlayer() => IsPlayer;
     public int GetLastBet() => LastBet;
+    public int GetCurrrentBet() => CurrentBet;
 
     public void AddBet(int BetAmount)
     {
@@ -71,6 +73,19 @@ public class PlayerController : MonoBehaviour
     {
         TotalChips += value;
         UpdateBetValue();
+    }
+
+    public void BackToMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+    public void CheckIfImBroke()
+    {
+        if(TotalChips <= 0)
+        {
+            BackToMenu();
+        }
     }
 
 }
