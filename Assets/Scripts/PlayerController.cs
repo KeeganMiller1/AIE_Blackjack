@@ -114,5 +114,9 @@ public class PlayerController : MonoBehaviour
     public int GetTotalChips() => TotalChips;
 
     // --- SETTERS --- //
-    public void SetDoubleLastBet() => LastBet *= LastBet; 
+    public void SetDoubleLastBet() 
+    { 
+        LastBet *= LastBet;
+        UpdateBetValue();
+    }
 }
