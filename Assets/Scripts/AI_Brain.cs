@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// This enum will be used to help determine the next course of action
@@ -57,6 +58,7 @@ public class AI_Brain : MonoBehaviour
 
     void Update()
     {
+        /*
         // Get the key to see if it's the AI's turn, than check if they've waited long enough for there turn, if they have than complete the action
         if(Keys.GetBool("IsTurn"))
         {
@@ -68,12 +70,15 @@ public class AI_Brain : MonoBehaviour
                 CurrentWaitTime = 0;
             }
         }
+        */
     }
 
     public IEnumerator Action()
     {
-        if(Keys.GetBool("IsTurn"))
+        
+        if (Keys.GetBool("IsTurn"))
         {
+            CardController.GetCardsInHand()[0].GetComponent<CardController>().ShowCard();
             yield return new WaitForSeconds(ActionWaitTime);
             // Make sure that the controller is valid
             if (CardController != null)
@@ -81,14 +86,12 @@ public class AI_Brain : MonoBehaviour
                 // Get the current value & run a switch to see if there are any pre-determined actions, if there are then perform those actions
                 // otherwise let the AI Decide based on their cards and the players cards.
                 var total = CardController.GetCurrentValue();
-                switch (total)
+                if(total > 17)
                 {
-                    case 17:            // STAND-OFF (Split Pot)
-                        AI_Stand();
-                        break;
-                    default:
-                        DetermineHit();
-                        break;
+                    AI_Stand();
+                } else
+                {
+                    DetermineHit();
                 }
             }
         }
@@ -105,21 +108,23 @@ public class AI_Brain : MonoBehaviour
         {
             if(p.GetComponent<PlayerCardController>().GetCurrentValue() > this.CardController.GetCurrentValue())
             {
-                Debug.Log(p.GetComponent<PlayerCardController>().GetCurrentValue());
-                AI_Hit();
-                ResetWaitTime();
+                Debug.Log("AI Hit 1");
+                NextAction = AI_TempAction.Hit;
                 break;
             } else if(p.GetComponent<PlayerCardController>().GetCurrentValue() == this.CardController.GetCurrentValue())
             {
                 if(p.GetComponent<PlayerCardController>().GetCurrentValue() > 17)
                 {
+                    Debug.Log("AI Stand");
                     NextAction = AI_TempAction.Stand;
                     Stand = true;
                 } else if(p.GetComponent<PlayerCardController>().GetCurrentValue() < 13)
                 {
+                    Debug.Log("AI_Hit 2");
                     NextAction = AI_TempAction.Hit;
                 } else
                 {
+                    Debug.Log("AI Random");
                     NextAction = AI_TempAction.Random;
                 }
                 
@@ -128,15 +133,13 @@ public class AI_Brain : MonoBehaviour
         
         if(NextAction == AI_TempAction.Hit)
         {
-            ResetWaitTime();
-            ActionController.Instance.Hit();
+            AI_Hit();
         } else if(NextAction == AI_TempAction.Stand)
         {
-            ResetWaitTime();
+
             AI_Stand();
         } else
         {
-            ResetWaitTime();
             RandomAction();
         }
     }
@@ -211,6 +214,19 @@ public class AI_Brain : MonoBehaviour
     void AI_Hit()
     {
         Dealer.Instance.DealCard(CardController);
+        StartCoroutine(Action());
+    }
+
+    void CheckIfBust()
+    {
+        int value = CardController.GetCurrentValue();
+        if(CardController == Dealer.Instance.GetCardController())
+        {
+            var go = GameObject.FindGameObjectWithTag("WinText");
+            go.GetComponent<Text>().text = "Win $" + ActionController.Instance.GetPlayer().GetLastBet();
+            go.GetComponent<Animator>().SetTrigger("Triggered");
+            Dealer.Instance.EndRound();
+        }
     }
 
     public void ResetWaitTime() => CurrentWaitTime = 0;

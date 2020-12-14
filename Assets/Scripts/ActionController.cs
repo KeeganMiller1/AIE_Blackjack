@@ -85,13 +85,26 @@ public class ActionController : MonoBehaviour
 
         return null;
     }
-    PlayerController GetPlayer()
+    public PlayerController GetPlayer()
     {
         List<GameObject> Players = GameManager.Instance.GetPlayersInGame();
         foreach (var p in Players)
         {
             if (p.GetComponent<PlayerController>().IsThisPlayer())
                 return p.GetComponent<PlayerController>();
+        }
+
+        return null;
+    }
+
+
+    public GameObject GetPlayerObject()
+    {
+        List<GameObject> Players = GameManager.Instance.GetPlayersInGame();
+        foreach (var p in Players)
+        {
+            if (p.GetComponent<PlayerController>().IsThisPlayer())
+                return p;
         }
 
         return null;

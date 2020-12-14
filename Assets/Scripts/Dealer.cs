@@ -263,4 +263,5 @@ public class Dealer : MonoBehaviour
     public GameStatus GetCurrentGameStatus() => CurrentGameStatus;
     public int GetPlayerNum() => PlayerNum;
     public AI_Brain GetBrain() => Brain;
+    public PlayerCardController GetCardController() => PlayerCards;
 }

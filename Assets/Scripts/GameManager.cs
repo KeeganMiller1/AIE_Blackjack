@@ -76,8 +76,9 @@ public class GameManager : MonoBehaviour
             {
                 // Reset the brain wait time & trigger the key so the AI knows that it's their turn
                 // We will change the status of the game from the AI brain
-                StartCoroutine(Dealer.Instance.GetBrain().Action());
                 Dealer.Instance.GetBrain().Keys.SetBool("IsTurn", true);
+                StartCoroutine(Dealer.Instance.GetBrain().Action());
+                
             }
 
         }
@@ -95,13 +96,16 @@ public class GameManager : MonoBehaviour
         ObjectsInScene.Add(newObject);
     }
 
-    public void ClearScene()
+    public IEnumerator ClearScene()
     {
-        foreach(var g in ObjectsInScene)
+        yield return new WaitForSeconds(5.0f);
+        foreach (var g in ObjectsInScene)
         {
             Destroy(g);
         }
         ObjectsInScene.Clear();
+        yield break;
+        
     }
     public Sprite GetSelectedCardBack() => CardBacks[SelectedCardBacks];
     public List<GameObject> GetPlayersInGame() => PlayersInGame;
