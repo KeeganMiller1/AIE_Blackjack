@@ -70,23 +70,26 @@ public class AI_Brain : MonoBehaviour
         }
     }
 
-
-    public void Action()
+    public IEnumerator Action()
     {
-        // Make sure that the controller is valid
-        if (CardController != null)
+        if(Keys.GetBool("IsTurn"))
         {
-            // Get the current value & run a switch to see if there are any pre-determined actions, if there are then perform those actions
-            // otherwise let the AI Decide based on their cards and the players cards.
-            var total = CardController.GetCurrentValue();
-            switch (total)
+            yield return new WaitForSeconds(ActionWaitTime);
+            // Make sure that the controller is valid
+            if (CardController != null)
             {
-                case 17:            // STAND-OFF (Split Pot)
-                    AI_Stand();
-                    break;
-                default:
-                    DetermineHit();
-                    break;
+                // Get the current value & run a switch to see if there are any pre-determined actions, if there are then perform those actions
+                // otherwise let the AI Decide based on their cards and the players cards.
+                var total = CardController.GetCurrentValue();
+                switch (total)
+                {
+                    case 17:            // STAND-OFF (Split Pot)
+                        AI_Stand();
+                        break;
+                    default:
+                        DetermineHit();
+                        break;
+                }
             }
         }
     }

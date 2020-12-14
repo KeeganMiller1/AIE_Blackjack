@@ -189,7 +189,7 @@ public class Dealer : MonoBehaviour
                     }
                 } else
                 {
-                    ShowWin(p.GetComponent<PlayerController>().GetLastBet() * 2);
+                    ShowWin(p.  GetComponent<PlayerController>().GetLastBet() * 2);
                 }
             }
 

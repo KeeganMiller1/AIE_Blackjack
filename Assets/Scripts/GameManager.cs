@@ -76,7 +76,7 @@ public class GameManager : MonoBehaviour
             {
                 // Reset the brain wait time & trigger the key so the AI knows that it's their turn
                 // We will change the status of the game from the AI brain
-                Dealer.Instance.GetBrain().ResetWaitTime();
+                StartCoroutine(Dealer.Instance.GetBrain().Action());
                 Dealer.Instance.GetBrain().Keys.SetBool("IsTurn", true);
             }
 
