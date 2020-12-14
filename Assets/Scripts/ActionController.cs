@@ -34,6 +34,18 @@ public class ActionController : MonoBehaviour
         }
     }
 
+    public void DoubleDown()
+    {
+        if(CheckIfTurn())
+        {
+            PlayerCardController player = GetPlayerCards();
+            if(player != null)
+            {
+                player.DoubleDown();
+            }
+        }
+    }
+
     // --- BETTING ACTIONS --- //
     public void BetFive() => GetPlayer().AddBet(5);
     public void BetTen() => GetPlayer().AddBet(10);
