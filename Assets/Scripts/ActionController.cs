@@ -40,11 +40,14 @@ public class ActionController : MonoBehaviour
     public void BetOneZeroZero() => GetPlayer().AddBet(100);
     public void ConfirmBet()
     {
-        if(Dealer.Instance.GetCurrentGameStatus() == GameStatus.BETTING)
+        if(GetPlayer().GetCurrrentBet() > 0)
         {
-            GetPlayer().ConfirmBet();
+            if (Dealer.Instance.GetCurrentGameStatus() == GameStatus.BETTING)
+            {
+                GetPlayer().ConfirmBet();
+            }
+            GameManager.Instance.NextPlayerTurn();
         }
-        GameManager.Instance.NextPlayerTurn();
     }
 
 
