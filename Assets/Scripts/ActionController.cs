@@ -7,6 +7,7 @@ public class ActionController : MonoBehaviour
     public static ActionController Instance;
     void Awake()
     {
+        // Create an instance
         if(Instance == null)
         {
             Instance = this;
@@ -15,6 +16,7 @@ public class ActionController : MonoBehaviour
             Destroy(this.gameObject);
         }
     }
+
     public void Hit()
     {
         if(CheckIfTurn())
@@ -50,7 +52,10 @@ public class ActionController : MonoBehaviour
         }
     }
 
-
+    /// <summary>
+    /// Check if it's the players turn
+    /// </summary>
+    /// <returns>retuns whether it's the players turn or not</returns>
     bool CheckIfTurn()
     {
 
@@ -74,6 +79,11 @@ public class ActionController : MonoBehaviour
         return false;
     }
 
+
+    /// <summary>
+    /// Gets the players card controller
+    /// </summary>
+    /// <returns></returns>
     PlayerCardController GetPlayerCards()
     {
         List<GameObject> Players = GameManager.Instance.GetPlayersInGame();
@@ -85,6 +95,11 @@ public class ActionController : MonoBehaviour
 
         return null;
     }
+
+    /// <summary>
+    /// Get The player controller
+    /// </summary>
+    /// <returns></returns>
     public PlayerController GetPlayer()
     {
         List<GameObject> Players = GameManager.Instance.GetPlayersInGame();
@@ -97,7 +112,10 @@ public class ActionController : MonoBehaviour
         return null;
     }
 
-
+    /// <summary>
+    ///  Gets the player GameObject
+    /// </summary>
+    /// <returns></returns>
     public GameObject GetPlayerObject()
     {
         List<GameObject> Players = GameManager.Instance.GetPlayersInGame();

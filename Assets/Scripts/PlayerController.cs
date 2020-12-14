@@ -21,22 +21,22 @@ public class PlayerController : MonoBehaviour
 
     void Awake()
     {
+        // Get the required components
         PlayerCards = GetComponent<PlayerCardController>();
     }
 
     void Start()
     {
+        // On start setup the text values
         UpdateBetValue();
     }
     
 
-    public PlayerCardController GetPlayerCards() => PlayerCards;
-    public void SetPlayerNum(int num) => PlayerGameNumber = num;
-    public int GetPlayerNum() => PlayerGameNumber;
-    public bool IsThisPlayer() => IsPlayer;
-    public int GetLastBet() => LastBet;
-    public int GetCurrrentBet() => CurrentBet;
-
+   
+    /// <summary>
+    /// Adds to the current bet
+    /// </summary>
+    /// <param name="BetAmount">The amount to add</param>
     public void AddBet(int BetAmount)
     {
         if (BetAmount <= (TotalChips - CurrentBet))
@@ -49,6 +49,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Confirms the bet and adds it to the pot (for the dealer)
+    /// </summary>
     public void ConfirmBet()
     {
         Dealer.Instance.AddToPot(CurrentBet);
@@ -58,7 +61,9 @@ public class PlayerController : MonoBehaviour
         UpdateBetValue();
     }
 
-
+    /// <summary>
+    /// Updates the UI elements
+    /// </summary>
     void UpdateBetValue()
     {
         // Set the bet details
@@ -69,17 +74,27 @@ public class PlayerController : MonoBehaviour
         currentValue.GetComponent<Text>().text = "$" + TotalChips.ToString();
     }
 
+    /// <summary>
+    /// Awards the player chips
+    /// </summary>
+    /// <param name="value">Ammount the player is being awarded</param>
     public void AddChips(int value)
     {
         TotalChips += value;
         UpdateBetValue();
     }
 
+    /// <summary>
+    /// Returns the player to the main menu
+    /// </summary>
     public void BackToMenu()
     {
         SceneManager.LoadScene(0);
     }
 
+    /// <summary>
+    /// Checks if the player has gone broke
+    /// </summary>
     public void CheckIfImBroke()
     {
         if(TotalChips <= 0)
@@ -87,5 +102,14 @@ public class PlayerController : MonoBehaviour
             BackToMenu();
         }
     }
+
+
+    /// --- GETTERS --- //
+    public PlayerCardController GetPlayerCards() => PlayerCards;
+    public void SetPlayerNum(int num) => PlayerGameNumber = num;
+    public int GetPlayerNum() => PlayerGameNumber;
+    public bool IsThisPlayer() => IsPlayer;
+    public int GetLastBet() => LastBet;
+    public int GetCurrrentBet() => CurrentBet;
 
 }

@@ -53,31 +53,17 @@ public class AI_Brain : MonoBehaviour
 
     void Awake()
     {
+        // Gets the required components
         CardController = GetComponent<PlayerCardController>();
     }
 
-    void Update()
-    {
-        /*
-        // Get the key to see if it's the AI's turn, than check if they've waited long enough for there turn, if they have than complete the action
-        if(Keys.GetBool("IsTurn"))
-        {
-            CardController.GetCardsInHand()[0].GetComponent<CardController>().ShowCard();
-            CurrentWaitTime += 1 * Time.deltaTime;
-            if(CurrentWaitTime > ActionWaitTime)
-            {
-                Action();
-                CurrentWaitTime = 0;
-            }
-        }
-        */
-    }
 
     public IEnumerator Action()
     {
-        
+        // Check if it's the AI's turn 
         if (Keys.GetBool("IsTurn"))
         {
+            // Show the cards
             CardController.GetCardsInHand()[0].GetComponent<CardController>().ShowCard();
             yield return new WaitForSeconds(ActionWaitTime);
             // Make sure that the controller is valid

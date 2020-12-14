@@ -55,6 +55,7 @@ public class GameManager : MonoBehaviour
             p.GetComponent<PlayerController>().SetPlayerNum(PlayersInGame.Count - 1);
         }
 
+        // Find the deaer & added them to the game as a player
         PlayersInGame.Add(GameObject.FindGameObjectWithTag("Dealer"));
         PlayersInGame[PlayersInGame.Count - 1].GetComponent<Dealer>().SetPlayerNum(PlayersInGame.Count - 1);
     }
@@ -96,6 +97,10 @@ public class GameManager : MonoBehaviour
         ObjectsInScene.Add(newObject);
     }
 
+    /// <summary>
+    /// Waits 3 seconds and than removes the cards & other objects required from the screen
+    /// </summary>
+    /// <returns></returns>
     public IEnumerator ClearScene()
     {
         yield return new WaitForSeconds(3.0f);

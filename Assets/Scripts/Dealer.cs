@@ -34,6 +34,7 @@ public class Dealer : MonoBehaviour
 
     public void Awake()
     {
+        // Create an instance
         if(Instance == null)
         {
             Instance = this;
@@ -42,12 +43,14 @@ public class Dealer : MonoBehaviour
             Destroy(this.gameObject);
         }
 
+        // Get required components
         PlayerCards = GetComponent<PlayerCardController>();
         Brain = GetComponent<AI_Brain>();
     }
 
     void Start()
     {
+        // Setup the players in game & set the game status
         GameManager.Instance.SetupPlayers();
         CurrentGameStatus = GameStatus.BETTING;
     }
@@ -80,18 +83,22 @@ public class Dealer : MonoBehaviour
             }
         }
 
+        // Check if any players have a natural
         CheckNaturals();
         
     }
 
     void CheckNaturals()
     {
+        // Create an initial list
         List<GameObject> Naturals = new List<GameObject>();
+        // Loop through each player in game & make sure that it isn't the dealer (as we will deal with them last, No pun intended)
         foreach(var p in GameManager.Instance.GetPlayersInGame())
         {
             PlayerController player = p.GetComponent<PlayerController>();
             if(player != null)
             {
+                // If the value is equal to 21 than add them to the list of naturals
                 if(p.GetComponent<PlayerCardController>().GetCurrentValue() == 21)
                 {
                     Naturals.Add(p);
@@ -99,10 +106,13 @@ public class Dealer : MonoBehaviour
             }
         }
 
+        // Check if the dealer has a natural
         bool DealerHasNat = false;
         if (PlayerCards.GetCurrentValue() == 21)
             DealerHasNat = true;
 
+        // If the dealer has natural than then the players get their last bet back 
+        // Otherise they get 2.5 back
         if(DealerHasNat)
         {
             foreach (var p in Naturals)
@@ -116,18 +126,34 @@ public class Dealer : MonoBehaviour
                 p.GetComponent<PlayerController>().AddChips(Mathf.RoundToInt(p.GetComponent<PlayerController>().GetLastBet() * 2.5f));
             }
         }
+
+        // TODO: Skip the player if they have a natural
     }
 
+    /// <summary>
+    /// this method will add chips to the pot INVALID
+    /// </summary>
+    /// <param name="Chips">Amount of chips to add</param>
     public void AddToPot(int Chips)
     {
         CurrentPot += Chips;
     }
 
+    /// <summary>
+    /// This method will deal a card to the player
+    /// </summary>
+    /// <param name="Cards">Card Controller</param>
+    /// <param name="ShowCard">Whether to show the card or not</param>
     public void DealCard(PlayerCardController Cards, bool ShowCard = true)
     {
         Cards.AddCard(GetCard(), ShowCard);
     }
 
+
+    /// <summary>
+    /// This method will get a random card from the deck
+    /// </summary>
+    /// <returns></returns>
     private ScriptableObject GetCard()
     {
         // Select a random card from the deck
@@ -138,6 +164,10 @@ public class Dealer : MonoBehaviour
         return card;
     }
 
+    /// <summary>
+    /// Change the current status of the game
+    /// </summary>
+    /// <param name="NewStatus"></param>
     public void ChangeGameStatus(GameStatus NewStatus)
     {
         // Change the state
@@ -189,7 +219,7 @@ public class Dealer : MonoBehaviour
                     }
                 } else
                 {
-                    ShowWin(p.  GetComponent<PlayerController>().GetLastBet() * 2);
+                    ShowWin(p.GetComponent<PlayerController>().GetLastBet() * 2);
                 }
             }
 
@@ -197,6 +227,9 @@ public class Dealer : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Have the Dealer Use AI for their turn
+    /// </summary>
     public void PlayTurn()
     {
         GetComponent<AI_Brain>().Action();
@@ -204,14 +237,17 @@ public class Dealer : MonoBehaviour
 
     public void EndRound()
     {
+        // Clear all the scene objects & change the game status to betting so we can start betting
         StartCoroutine(GameManager.Instance.ClearScene());
         ChangeGameStatus(GameStatus.BETTING);
+        // Loop through each player in the game & reset their hand
         foreach(var p in GameManager.Instance.GetPlayersInGame())
         {
             p.GetComponent<PlayerCardController>().GetCardsInHand().Clear();
             p.GetComponent<PlayerCardController>().ResetCardPosition();
         }
 
+        // Check if any players need to be kicked.
         CheckBrokePlayers();
     }
 
@@ -246,8 +282,12 @@ public class Dealer : MonoBehaviour
 
     #endregion
 
+    /// <summary>
+    /// Check if any players need to be remove as they are out of chips
+    /// </summary>
     void CheckBrokePlayers()
     {
+        // Loop through each player in the game and have them check if they have chips
         foreach(var p in GameManager.Instance.GetPlayersInGame())
         {
             PlayerController player = p.GetComponent<PlayerController>();
@@ -259,6 +299,8 @@ public class Dealer : MonoBehaviour
     }
 
 
+
+    // --- GETTERS --- //
     public void SetPlayerNum(int num) => PlayerNum = num;
     public GameStatus GetCurrentGameStatus() => CurrentGameStatus;
     public int GetPlayerNum() => PlayerNum;

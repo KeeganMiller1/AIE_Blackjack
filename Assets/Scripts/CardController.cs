@@ -6,17 +6,20 @@ public class CardController : MonoBehaviour
 {
     public ScriptableObject Card;
     bool CanSeeCard;
-    public void SetupObject()
-    {
-        
-    }
 
+
+    /// <summary>
+    /// Show the back of the card
+    /// </summary>
     public void HideCard()
     {
         GetComponent<SpriteRenderer>().sprite = GameManager.Instance.GetSelectedCardBack();
         CanSeeCard = false;
     }
 
+    /// <summary>
+    /// Show the face of the card
+    /// </summary>
     public void ShowCard()
     {
         CardObject card = Card as CardObject;
@@ -24,5 +27,6 @@ public class CardController : MonoBehaviour
         CanSeeCard = true;
     }
 
+    // --- GETTERS --- //
     public bool IsCardVisible() => CanSeeCard;
 }

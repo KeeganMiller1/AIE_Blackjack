@@ -23,6 +23,7 @@ public class PlayerCardController : MonoBehaviour
 
     void Start()
     {
+        // Set the reset position & the last position to be the reset position
         ResetPosition = new Vector2(2.0f, GetComponent<Transform>().position.y);
         LastUsedPosition = ResetPosition;
     }
@@ -46,6 +47,7 @@ public class PlayerCardController : MonoBehaviour
         go.GetComponent<CardController>().Card = card;
         CardsInHand.Add(go);
 
+        // Show or hide the card
         if (ShowCard)
         {
             go.GetComponent<CardController>().ShowCard();
@@ -69,6 +71,8 @@ public class PlayerCardController : MonoBehaviour
     /// </summary>
     private void CheckHandStatus()
     {
+        // If the current value of the hand is over 21, than set the best to true find the losing object and trigger the animation
+        // Than set the next players turn
         if(HandValue > 21)
         {
             Bust = true;
@@ -81,6 +85,10 @@ public class PlayerCardController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// This method will retrieve the next position for the card
+    /// </summary>
+    /// <returns></returns>
     Vector2 GetNextPosition()
     {
         LastUsedPosition = new Vector2(LastUsedPosition.x + CardPositionIncrement, 0);
@@ -88,6 +96,7 @@ public class PlayerCardController : MonoBehaviour
     }
 
 
+    // This method will clear the current hand
     public void EmptyHand() => CardsInHand.Clear();
 
     int CalculateHand()
