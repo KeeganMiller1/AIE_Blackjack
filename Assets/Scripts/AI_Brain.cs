@@ -108,20 +108,32 @@ public class AI_Brain : MonoBehaviour
                 break;
             } else if(p.GetComponent<PlayerCardController>().GetCurrentValue() == this.CardController.GetCurrentValue())
             {
-                // TODO: Before hitting check the number of the card and potenially use probability to detemine the AI Action
-                NextAction = AI_TempAction.Stand;
-                Stand = true;
+                if(p.GetComponent<PlayerCardController>().GetCurrentValue() > 17)
+                {
+                    NextAction = AI_TempAction.Stand;
+                    Stand = true;
+                } else if(p.GetComponent<PlayerCardController>().GetCurrentValue() < 13)
+                {
+                    NextAction = AI_TempAction.Hit;
+                } else
+                {
+                    NextAction = AI_TempAction.Random;
+                }
+                
             }
         }  
         
         if(NextAction == AI_TempAction.Hit)
         {
+            ResetWaitTime();
             ActionController.Instance.Hit();
         } else if(NextAction == AI_TempAction.Stand)
         {
+            ResetWaitTime();
             AI_Stand();
         } else
         {
+            ResetWaitTime();
             RandomAction();
         }
     }
@@ -188,7 +200,7 @@ public class AI_Brain : MonoBehaviour
     {
         ActionController.Instance.Stand();
         Keys.SetBool("IsTurn", false);
-        //Dealer.Instance.ChangeGameStatus(GameStatus.COUNTING);
+        Dealer.Instance.ChangeGameStatus(GameStatus.COUNTING);
         Debug.Log("Standing");
         GameManager.Instance.ResetTurns();
     }
