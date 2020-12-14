@@ -95,7 +95,14 @@ public class GameManager : MonoBehaviour
         ObjectsInScene.Add(newObject);
     }
 
-    public void ClearScene() => ObjectsInScene.Clear();
+    public void ClearScene()
+    {
+        foreach(var g in ObjectsInScene)
+        {
+            Destroy(g);
+        }
+        ObjectsInScene.Clear();
+    }
     public Sprite GetSelectedCardBack() => CardBacks[SelectedCardBacks];
     public List<GameObject> GetPlayersInGame() => PlayersInGame;
     public int GetPlayerTurn() => PlayersTurn;

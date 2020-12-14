@@ -211,6 +211,7 @@ public class Dealer : MonoBehaviour
     public void EndRound()
     {
         GameManager.Instance.ClearScene();
+        ChangeGameStatus(GameStatus.BETTING);
     }
 
     #region Win Triggers
