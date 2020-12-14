@@ -204,7 +204,7 @@ public class Dealer : MonoBehaviour
 
     public void EndRound()
     {
-        GameManager.Instance.ClearScene();
+        StartCoroutine(GameManager.Instance.ClearScene());
         ChangeGameStatus(GameStatus.BETTING);
         foreach(var p in GameManager.Instance.GetPlayersInGame())
         {
