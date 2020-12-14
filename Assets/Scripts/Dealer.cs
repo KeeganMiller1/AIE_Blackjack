@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum GameStatus
 {
@@ -29,7 +30,7 @@ public class Dealer : MonoBehaviour
     PlayerCardController PlayerCards;
     AI_Brain Brain;
 
-    
+    List<GameObject> Blackjacks = new List<GameObject>();
 
     public void Awake()
     {
@@ -56,6 +57,8 @@ public class Dealer : MonoBehaviour
         // Get a list of the players in game (Excluding the dealer)
         List<GameObject> Players = GameManager.Instance.GetPlayersInGame();
         int playerCount = 0;
+
+        
         // Loop through each player (validate the player) and add 2 cards to their hand
         foreach(var p in Players)
         {
@@ -172,37 +175,31 @@ public class Dealer : MonoBehaviour
 
     private void CountCards()
     {
-        foreach(var card in this.PlayerCards.GetCardsInHand())
-        {
-            card.GetComponent<CardController>().ShowCard();
-        }
-
-        PlayerController HighestValue = null;
         foreach(var p in GameManager.Instance.GetPlayersInGame())
         {
-            PlayerCardController Cntrl = p.GetComponent<PlayerCardController>();
-            if(Cntrl != null)
+
+            // If the player controller isn't the dealers
+            if(p.GetComponent<PlayerCardController>() != PlayerCards && !p.GetComponent<PlayerCardController>().HasPlayerBust())
             {
-                if(Cntrl.GetCurrentValue() <= 21)
+                // Get current value
+                int player_value = p.GetComponent<PlayerCardController>().GetCurrentValue();
+                // Check if the player value is larget than the dealer, if it is than double there bet.
+                // Otherwise if it's equal to the dealer they get their bet back.
+                if(player_value > PlayerCards.GetCurrentValue())
                 {
-                    if(HighestValue == null)
-                    {
-                        HighestValue = p.GetComponent<PlayerController>();
-                    } else
-                    {
-                        if (Cntrl.GetCurrentValue() > HighestValue.GetPlayerCards().GetCurrentValue())
-                            HighestValue = Cntrl.gameObject.GetComponent<PlayerController>();
-                    }
+                    p.GetComponent<PlayerController>().AddChips(p.GetComponent<PlayerController>().GetLastBet() * 2);
+                    ShowWin(p.GetComponent<PlayerController>().GetLastBet() * 2);
+                } else if(player_value == PlayerCards.GetCurrentValue())
+                {
+                    p.GetComponent<PlayerController>().AddChips(p.GetComponent<PlayerController>().GetLastBet());
+                    ShowDraw();
+                } else
+                {
+                    ShowLose();
                 }
             }
-        }
 
-        if(this.PlayerCards.GetCurrentValue() > HighestValue.GetPlayerCards().GetCurrentValue())
-        {
-            Debug.Log("Dealer Wins");
-        } else
-        {
-            Debug.Log("Player Wins");
+            EndRound();
         }
     }
 
@@ -210,6 +207,42 @@ public class Dealer : MonoBehaviour
     {
         GetComponent<AI_Brain>().Action();
     }
+
+    public void EndRound()
+    {
+        GameManager.Instance.ClearScene();
+    }
+
+    #region Win Triggers
+    public void ShowWin(int value)
+    {
+        GameObject go = GameObject.FindGameObjectWithTag("WinText");
+        if(go != null)
+        {
+            go.GetComponent<Text>().text = "WON $" + value.ToString();
+            go.GetComponent<Animator>().SetTrigger("Triggered");
+        }
+    }
+
+    public void ShowLose()
+    {
+        GameObject go = GameObject.FindGameObjectWithTag("LoseText");
+        if (go != null)
+        {
+            go.GetComponent<Animator>().SetTrigger("Triggered");
+        }
+    }
+
+    public void ShowDraw()
+    {
+        GameObject go = GameObject.FindGameObjectWithTag("DrawText");
+        if (go != null)
+        {
+            go.GetComponent<Animator>().SetTrigger("Triggered");
+        }
+    }
+
+    #endregion
 
 
     public void SetPlayerNum(int num) => PlayerNum = num;
