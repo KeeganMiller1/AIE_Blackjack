@@ -204,7 +204,7 @@ public class Dealer : MonoBehaviour
             p.GetComponent<PlayerCardController>().ResetCardPosition();
         }
 
-        // TODO: Check If Player has broken Bank if so go to end screen
+        CheckBrokePlayers();
     }
 
     #region Win Triggers
@@ -237,6 +237,18 @@ public class Dealer : MonoBehaviour
     }
 
     #endregion
+
+    void CheckBrokePlayers()
+    {
+        foreach(var p in GameManager.Instance.GetPlayersInGame())
+        {
+            PlayerController player = p.GetComponent<PlayerController>();
+            if(player != null)
+            {
+                player.CheckIfImBroke();
+            }
+        }
+    }
 
 
     public void SetPlayerNum(int num) => PlayerNum = num;

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerCardController : MonoBehaviour
 {
@@ -71,7 +72,11 @@ public class PlayerCardController : MonoBehaviour
         if(HandValue > 21)
         {
             Bust = true;
-            // TODO: Display bust
+            GameObject go = GameObject.FindGameObjectWithTag("LoseText");
+            if(go != null)
+            {
+                go.GetComponent<Animator>().SetTrigger("Triggered");
+            }
             GameManager.Instance.NextPlayerTurn();
         }
     }
