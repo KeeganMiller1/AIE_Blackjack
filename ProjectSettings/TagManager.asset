@@ -7,6 +7,10 @@ TagManager:
   - Dealer
   - Bet Text
   - Player Chips
+  - Card
+  - WinText
+  - LoseText
+  - DrawText
   layers:
   - Default
   - TransparentFX
