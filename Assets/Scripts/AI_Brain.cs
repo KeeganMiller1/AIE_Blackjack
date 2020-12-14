@@ -73,7 +73,7 @@ public class AI_Brain : MonoBehaviour
                 // Get the current value & run a switch to see if there are any pre-determined actions, if there are then perform those actions
                 // otherwise let the AI Decide based on their cards and the players cards.
                 var total = CardController.GetCurrentValue();
-                if(total > 17 || HasEveryoneBusted())
+                if(total > 17 || !HasEveryoneBusted())
                 {
                     AI_Stand();
                 } else
