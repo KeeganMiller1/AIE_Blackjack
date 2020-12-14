@@ -183,4 +183,5 @@ public class PlayerCardController : MonoBehaviour
 
     public int GetCurrentValue() => HandValue;
     public bool HasPlayerBust() => Bust;
+    public void ResetCardPosition() => LastUsedPosition = ResetPosition;
 }
