@@ -46,6 +46,8 @@ public class ActionController : MonoBehaviour
         }
     }
 
+    
+
     // --- BETTING ACTIONS --- //
     public void BetFive() => GetPlayer().AddBet(5);
     public void BetTen() => GetPlayer().AddBet(10);
@@ -62,6 +64,11 @@ public class ActionController : MonoBehaviour
             }
             GameManager.Instance.NextPlayerTurn();
         }
+    }
+
+    public void ClearBet()
+    {
+        GetPlayer().ClearBet();
     }
 
     /// <summary>

@@ -61,6 +61,11 @@ public class PlayerController : MonoBehaviour
         UpdateBetValue();
     }
 
+    public void ClearBet()
+    {
+        CurrentBet = 0;
+    }
+
     /// <summary>
     /// Updates the UI elements
     /// </summary>

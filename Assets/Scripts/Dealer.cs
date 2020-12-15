@@ -176,9 +176,11 @@ public class Dealer : MonoBehaviour
         switch(NewStatus)
         {
             case GameStatus.BETTING:
+                GameObject.FindGameObjectWithTag("ChipsContainer").GetComponent<Animator>().SetBool("Hidden", false);
                 break;
             case GameStatus.IN_PLAY:
                 BeginRound();
+                GameObject.FindGameObjectWithTag("ChipsContainer").GetComponent<Animator>().SetBool("Hidden", true);
                 break;
             case GameStatus.COUNTING:
                 CountCards();
