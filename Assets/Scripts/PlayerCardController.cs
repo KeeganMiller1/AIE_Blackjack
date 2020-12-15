@@ -78,6 +78,62 @@ public class PlayerCardController : MonoBehaviour
         }
     }
 
+    public void CheckIfCanSplit()
+    {
+        int value_1 = 0;
+        int value_2 = 0;
+        bool FaceCard = false;           
+        foreach(var card in CardsInHand)
+        {
+            var c = card.GetComponent<CardController>().Card as CardObject;
+            if(value_1 == 0)
+            {
+                if(c.CardType == ECardType.STANDARD)
+                {
+                    value_1 = c.CardValue;
+                } else
+                {
+                    value_1 = CreateCardValue(c.CardType);
+                }
+            } else
+            {
+                if(c.CardType == ECardType.STANDARD)
+                {
+                    value_2 = c.CardValue;
+                } else
+                {
+                    value_2 = CreateCardValue(c.CardType);
+                }
+            }
+        }
+
+
+        if(value_1 == value_2)
+        {
+            // TODO: Display Split Button
+            
+        }
+    }
+
+    int CreateCardValue(ECardType type)
+    {
+        switch(type)
+        {
+            case ECardType.JACK:
+                return 12;
+            case ECardType.QUEEN:
+                return 13;
+            case ECardType.KING:
+                return 14;
+            case ECardType.ACE:
+                return 11;
+            default:
+                return 10; 
+        }
+
+        return 10;
+    }
+
 
     /// <summary>
     /// Checks the current value of the hand to see if it's a win or lost, or continue playing
